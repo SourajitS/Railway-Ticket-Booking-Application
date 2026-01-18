@@ -13,7 +13,7 @@ public class TrainMapper {
         TrainDTO trainDTO=new TrainDTO();
         trainDTO.setTrainId(train.getTrainId());
         trainDTO.setTrainName(train.getTrainName());
-        trainDTO.setRouteName(train.getRouteName());
+
         return trainDTO;
     }
 
@@ -23,7 +23,7 @@ public class TrainMapper {
         Train train = new Train();
         train.setTrainId(trainDTO.getTrainId());
         train.setTrainName(trainDTO.getTrainName());
-        train.setRouteName(trainDTO.getRouteName());
+
         return train;
     }
 }

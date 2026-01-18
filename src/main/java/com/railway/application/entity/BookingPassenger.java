@@ -5,23 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TrainImage {
-
+public class BookingPassenger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fileName;
-    private  String fileType;
-    private Long size;
-    private final LocalDateTime uploadTime=LocalDateTime.now();
-    @OneToOne(mappedBy = "trainImage")
-    private Train train;
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
+    private String name;
+    private Integer age;
+    private String gender;
+    private String seatNumber;
+
 
 }

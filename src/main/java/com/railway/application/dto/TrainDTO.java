@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 public class TrainDTO {
 
 
-    private String trainId;
+    private Long trainId;
 //    @Schema(
 //            description = "Train name",
 //            example = "LKO - DELHI Intercity",
@@ -31,11 +31,11 @@ public class TrainDTO {
     )
     private String routeName;
 
-    public String getTrainId() {
+    public Long getTrainId() {
         return trainId;
     }
 
-    public void setTrainId(String trainId) {
+    public void setTrainId(Long trainId) {
         this.trainId = trainId;
     }
 
@@ -47,11 +47,4 @@ public class TrainDTO {
         this.trainName = trainName;
     }
 
-    public String getRouteName() {
-        return routeName;
-    }
-
-    public void setRouteName(String routeName) {
-        this.routeName = routeName;
-    }
 }
