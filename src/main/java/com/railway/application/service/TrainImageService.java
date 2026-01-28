@@ -38,7 +38,7 @@ public class TrainImageService {
         this.trainImageRepository = trainImageRepository;
     }
 
-    public TrainImageResponse upload(MultipartFile file, String trainId) throws IOException {
+    public TrainImageResponse upload(MultipartFile file, Long trainId) throws IOException {
 
         // 1️⃣ Validate file
         if (file.isEmpty()) {
@@ -76,7 +76,7 @@ public class TrainImageService {
         return TrainImageResponse.from(trainImage, baseUrl , trainId);
     }
 
-    public TrainImageDataWithResource loadImageByTrainId(String trainId) throws MalformedURLException {
+    public TrainImageDataWithResource loadImageByTrainId(Long trainId) throws MalformedURLException {
         Train train = trainRepo.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id:" + trainId));
         TrainImage trainImage = train.getTrainImage();
         if(trainImage==null)

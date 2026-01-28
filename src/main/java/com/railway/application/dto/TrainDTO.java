@@ -2,10 +2,16 @@ package com.railway.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainDTO {
-
-
     private Long trainId;
 //    @Schema(
 //            description = "Train name",
@@ -18,33 +24,16 @@ public class TrainDTO {
             message = "Invalid train name. Only letters, spaces and hyphens are allowed"
     )
     private String trainName;
+    private String number;
 
 //    @Schema(
 //            description = "Route name in format: SOURCE - DESTINATION",
 //            example = "LKO - DELHI",
 //            required = true
 //    )
-    @NotBlank(message = "Route name is required")
-    @Pattern(
-            regexp = "^[A-Z]{2,5}\\s-\\s[A-Z]{2,20}$",
-            message = "Route name must be in format 'LKO - DELHI'"
-    )
-    private String routeName;
+    private Integer totalDistance;
+    private StationDto sourceStation;
+    private StationDto destinationStation;
 
-    public Long getTrainId() {
-        return trainId;
-    }
-
-    public void setTrainId(Long trainId) {
-        this.trainId = trainId;
-    }
-
-    public String getTrainName() {
-        return trainName;
-    }
-
-    public void setTrainName(String trainName) {
-        this.trainName = trainName;
-    }
 
 }
