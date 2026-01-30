@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -24,8 +25,8 @@ public class TrainRoute {
     @JoinColumn(name = "station_id")
     private Station station;
     private Integer stationOrder;
-    private LocalDateTime arrivalTime;
-    private LocalDateTime departureTime;
+    private LocalTime arrivalTime;
+    private LocalTime departureTime;
     private Integer haltMinutes;
     private Integer distanceFromSource;
 

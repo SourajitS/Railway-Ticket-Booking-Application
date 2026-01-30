@@ -10,6 +10,7 @@ public class StationMapper {
     public StationDto toDto(Station station)
     {
         StationDto stationDto=new StationDto();
+        stationDto.setId(station.getId());
         stationDto.setCode(station.getCode());
         stationDto.setName(station.getName());
         stationDto.setCity(station.getCity());
