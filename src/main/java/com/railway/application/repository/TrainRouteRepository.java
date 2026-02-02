@@ -1,6 +1,6 @@
 package com.railway.application.repository;
 
-import com.railway.application.entity.Train;
+
 import com.railway.application.entity.TrainRoute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

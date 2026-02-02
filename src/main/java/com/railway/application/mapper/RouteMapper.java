@@ -19,7 +19,12 @@ public class RouteMapper {
         trainRouteDto.setStationOrder(trainRoute.getStationOrder());
         trainRouteDto.setDepartureTime(trainRoute.getDepartureTime());
         trainRouteDto.setDistanceFromSource(trainRoute.getDistanceFromSource());
-        trainRouteDto.setStation(new StationDto(trainRoute.getStation().getId(),trainRoute.getStation().getName(),trainRoute.getStation().getCode(),trainRoute.getStation().getCity(),trainRoute.getStation().getState()));
+        trainRouteDto.setStation(new StationDto(
+                trainRoute.getStation().getId(),
+                trainRoute.getStation().getName(),
+                trainRoute.getStation().getCode(),
+                trainRoute.getStation().getCity(),
+                trainRoute.getStation().getState()));
         return trainRouteDto;
     }
 
