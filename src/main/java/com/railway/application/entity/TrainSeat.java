@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.*;
 
 import java.math.BigDecimal;
 
@@ -26,8 +27,12 @@ public class TrainSeat {
     @Enumerated(EnumType.STRING)
     private CoachType coachType;
     private Integer totalSeats;
-    private Integer availableSeats;
-    private Integer nextToAssign=1;
+    @Column(nullable = false)
+    private int availableSeats;
+    private Integer trainSeatOrder;
+    private Integer nextSeatToAssign;
 
-    private BigDecimal price;
+    private Double price;
+
+
 }
