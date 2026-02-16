@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,7 +24,12 @@ public class User {
     private String password;
     private String phone;
     private LocalDateTime createdAt;
-    @Enumerated(EnumType.STRING)
-    private  UserRole userRole=UserRole.ROLE_NORMAL;
+//    @Enumerated(EnumType.STRING)
+//    private  UserRole userRole=UserRole.ROLE_NORMAL;
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+    @ManyToMany(fetch=FetchType.EAGER)
+    private List<Role> roles=new ArrayList<>();
+
 
 }

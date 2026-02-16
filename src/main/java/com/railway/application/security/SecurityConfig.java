@@ -18,7 +18,6 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
@@ -27,11 +26,13 @@ public class SecurityConfig {
 @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.csrf(e->e.disable())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/login")
+            httpSecurity.csrf(e->e.disable())
+                        .authorizeHttpRequests(request-> request.requestMatchers("/auth/login","/auth/register")
                         .permitAll()
-                        .anyRequest().
-                        authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                         .requestMatchers("/user/**").hasRole("NORMAL")
+                        .anyRequest()
+                        .authenticated()
                 );
         httpSecurity.sessionManagement(
                 session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -42,11 +43,11 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder()
-//    {
-//        return  new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder()
+    {
+        return  new BCryptPasswordEncoder();
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception
     {
