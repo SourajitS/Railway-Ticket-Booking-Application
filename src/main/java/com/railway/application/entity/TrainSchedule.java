@@ -20,14 +20,11 @@ public class TrainSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private LocalDateTime runDate;
+    private LocalDate runDate;
     @ManyToOne
     @JoinColumn(name = "train_id")
     private Train train;
-
     private Integer availableSeats;
-
     @OneToMany(mappedBy = "trainSchedule")
     private List<TrainSeat> trainSeats;
     @OneToMany(mappedBy = "trainSchedule")

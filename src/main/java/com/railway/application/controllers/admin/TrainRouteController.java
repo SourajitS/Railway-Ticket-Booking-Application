@@ -1,11 +1,8 @@
 package com.railway.application.controllers.admin;
 
 import com.railway.application.dto.TrainRouteDto;
-import com.railway.application.repository.TrainRepo;
 import com.railway.application.service.TrainRouteService;
-import com.railway.application.service.impl.TrainServiceImpl;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -27,12 +27,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
             httpSecurity.csrf(e->e.disable())
-                        .authorizeHttpRequests(request-> request.requestMatchers("/auth/login","/auth/register")
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                         .requestMatchers("/user/**").hasRole("NORMAL")
-                        .anyRequest()
-                        .authenticated()
+                                .authorizeHttpRequests(request->
+                                request
+                                .requestMatchers(
+                                        "/auth/login",
+                                        "/auth/register",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/webjars/**")
+
+                        .permitAll().anyRequest().permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                         .requestMatchers("/user/**").hasRole("NORMAL")
+//                        .anyRequest()
+//
+//                        .authenticated()
                 );
         httpSecurity.sessionManagement(
                 session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

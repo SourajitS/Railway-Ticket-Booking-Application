@@ -6,9 +6,8 @@ import com.railway.application.entity.Train;
 import com.railway.application.entity.TrainImage;
 import com.railway.application.exceptions.ResourceNotFoundException;
 import com.railway.application.repository.TrainImageRepository;
-import com.railway.application.repository.TrainRepo;
+import com.railway.application.repository.TrainRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,11 +28,11 @@ public class TrainImageService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    private final TrainRepo trainRepo;
+    private final TrainRepository trainRepository;
     private final TrainImageRepository trainImageRepository;
 
-    public TrainImageService(TrainRepo trainRepo, TrainImageRepository trainImageRepository) {
-        this.trainRepo = trainRepo;
+    public TrainImageService(TrainRepository trainRepository, TrainImageRepository trainImageRepository) {
+        this.trainRepository = trainRepository;
         this.trainImageRepository = trainImageRepository;
     }
 
@@ -46,7 +44,7 @@ public class TrainImageService {
         }
 
         // 2️⃣ Fetch train
-        Train train = trainRepo.findById(trainId)
+        Train train = trainRepository.findById(trainId)
                 .orElseThrow(() -> new ResourceNotFoundException("Train not found with id: " + trainId));
 
         // 3️⃣ Create folder if not exists
@@ -69,7 +67,7 @@ public class TrainImageService {
 
         train.setTrainImage(image);
        // TrainImage savedImage = trainImageRepository.save(image);
-        Train saved = trainRepo.save(train);
+        Train saved = trainRepository.save(train);
         TrainImage trainImage = saved.getTrainImage();
 
         // 7️⃣ Return response
@@ -77,7 +75,7 @@ public class TrainImageService {
     }
 
     public TrainImageDataWithResource loadImageByTrainId(Long trainId) throws MalformedURLException {
-        Train train = trainRepo.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id:" + trainId));
+        Train train = trainRepository.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id:" + trainId));
         TrainImage trainImage = train.getTrainImage();
         if(trainImage==null)
         {

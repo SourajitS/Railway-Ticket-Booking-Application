@@ -7,24 +7,23 @@ import com.railway.application.entity.TrainRoute;
 import com.railway.application.exceptions.ResourceNotFoundException;
 import com.railway.application.mapper.RouteMapper;
 import com.railway.application.repository.StationRepository;
-import com.railway.application.repository.TrainRepo;
+import com.railway.application.repository.TrainRepository;
 import com.railway.application.repository.TrainRouteRepository;
 import com.railway.application.service.TrainRouteService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class TrainRouteServiceImpl implements TrainRouteService {
 
-    private final TrainRepo trainRepo;
+    private final TrainRepository trainRepository;
     private final StationRepository stationRepository;
     private final TrainRouteRepository trainRouteRepository;
     private final RouteMapper routeMapper;
 
-    public TrainRouteServiceImpl(TrainRepo trainRepo, StationRepository stationRepository, TrainRouteRepository trainRouteRepository, RouteMapper routeMapper) {
-        this.trainRepo = trainRepo;
+    public TrainRouteServiceImpl(TrainRepository trainRepository, StationRepository stationRepository, TrainRouteRepository trainRouteRepository, RouteMapper routeMapper) {
+        this.trainRepository = trainRepository;
         this.stationRepository = stationRepository;
         this.trainRouteRepository = trainRouteRepository;
         this.routeMapper = routeMapper;
@@ -34,7 +33,7 @@ public class TrainRouteServiceImpl implements TrainRouteService {
     public TrainRouteDto addRoute(TrainRouteDto dto) {
 
         Long trainId = dto.getTrainId();
-        Train train = trainRepo.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id " + trainId));
+        Train train = trainRepository.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id " + trainId));
 
         Long stationId = dto.getStation().getId();
         Station station = stationRepository.findById(stationId).orElseThrow(() -> new ResourceNotFoundException("Station not found with id " + stationId));
@@ -48,7 +47,7 @@ public class TrainRouteServiceImpl implements TrainRouteService {
     @Override
     public List<TrainRouteDto> getRoutesByTrain(Long trainId) {
 
-        Train train = trainRepo.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id " + trainId));
+        Train train = trainRepository.findById(trainId).orElseThrow(() -> new ResourceNotFoundException("Train not found with id " + trainId));
         List<TrainRoute> trainRoutes = trainRouteRepository.findRouteByTrainId(trainId);
         List<TrainRouteDto> trainRouteDtos = trainRoutes.stream().map(trainRoute -> routeMapper.toRouteDto(trainRoute)).toList();
         return trainRouteDtos;
@@ -70,7 +69,7 @@ public class TrainRouteServiceImpl implements TrainRouteService {
 
         // 3️⃣ Update train if changed
         if (dto.getTrainId() != null) {
-            Train train = trainRepo.findById(dto.getTrainId())
+            Train train = trainRepository.findById(dto.getTrainId())
                     .orElseThrow(() -> new ResourceNotFoundException(
                             "Train not found with id " + dto.getTrainId()));
             route.setTrain(train);
