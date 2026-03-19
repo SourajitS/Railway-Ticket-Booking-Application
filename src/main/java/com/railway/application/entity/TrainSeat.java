@@ -35,4 +35,12 @@ public class TrainSeat {
     private Double price;
 
 
+    public boolean isCoachFull() {
+        return availableSeats <= 0;
+    }
+
+    public boolean isSeatAvailable(int seatToBook) {
+        return seatToBook <= availableSeats;
+    }
+
 }

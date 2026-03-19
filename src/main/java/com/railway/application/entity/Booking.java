@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "destination_Station_id")
     private Station destinationStation;
-    private LocalDateTime journeyDate;
+    private LocalDate journeyDate;
     private BigDecimal totalFare;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;

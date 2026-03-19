@@ -23,5 +23,6 @@ public class AvailableTrainResponse {
     private Map<CoachType,Integer> seatAvailable;
     private Map<CoachType,Double> price;
     private LocalDate scheduledDate;
+    private Long trainScheduleId;
 
 }
