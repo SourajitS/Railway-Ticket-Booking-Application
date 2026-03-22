@@ -32,16 +32,18 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/auth/login",
                                         "/auth/register",
+                                        "/auth/refresh-token",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
                                         "/webjars/**")
 
-                        .permitAll().anyRequest().permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                         .requestMatchers("/user/**").hasRole("NORMAL")
-//                        .anyRequest()
-//
-//                        .authenticated()
+                        .permitAll()
+                                        //.anyRequest().permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                         .requestMatchers("/user/**").hasRole("NORMAL")
+                        .anyRequest()
+
+                        .authenticated()
                 );
         httpSecurity.sessionManagement(
                 session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

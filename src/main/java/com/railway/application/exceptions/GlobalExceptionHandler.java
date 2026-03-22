@@ -1,6 +1,7 @@
 package com.railway.application.exceptions;
 
 import com.railway.application.dto.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.SignatureException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("No Data found " + ex.getMessage(), "404", false);
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -51,5 +54,21 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(message, "400", false);
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex)
+    {
+        ErrorResponse errorResponse = new ErrorResponse("Token Expired", "400", false);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(io.jsonwebtoken.security.SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleSignatureException(io.jsonwebtoken.security.SignatureException ex)
+    {
+        ErrorResponse errorResponse = new ErrorResponse("Invalid Token", "400", false);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }

@@ -5,32 +5,66 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtHelper {
 
-    private static final long JWT_VALIDITY=5*60*1000;
-    private final String SECRET="my-super-secret-key-my-super-secret-key-aaaaaafgdgdgggggggggggggggggggggggggggggggggggggjh";
-    private Key key;
+    private static final long ACCESS_TOKEN_VALIDITY=5*60*1000;//5 min
+    private static final long REFRESH_TOKEN_VALIDITY=60*60*1000;//60 min
+    private static final String SECRET="my-super-secret-key-my-super-secret-key-aaaaaafgdgdgggggggggggggggggggggggggggggggggggggjh";
+    private SecretKey key;
 
     @PostConstruct
-    public void init()
-    {
-        this.key= Keys.hmacShaKeyFor(SECRET.getBytes());
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(UserDetails userDetails)
+    public String generateAccessToken(UserDetails userDetails) {
+        Map<String ,Object> claims=new HashMap<>();
+        claims.put("token_type","access_token");
+        return buildToken(claims,userDetails.getUsername(),ACCESS_TOKEN_VALIDITY);
+    }
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String ,Object> claims=new HashMap<>();
+        claims.put("token_type","refresh_token");
+        return buildToken(claims,userDetails.getUsername(),REFRESH_TOKEN_VALIDITY);
+    }
+
+    public boolean isRefreshToken(String token)
     {
+        return getTokenType(token).equals("refresh_token");
+    }
+    public boolean isAccessToken(String token)
+    {
+        return getTokenType(token).equals("access_token");
+    }
+
+    private String getTokenType(String token)
+    {
+        Object tokenType = getClaims(token).get("token_type");
+        return tokenType!=null?tokenType.toString():"";
+    }
+
+    private String buildToken(Map<String,Object> claims, String subject,long validity)
+    {
+
+        //generate token
+
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+JWT_VALIDITY))
-                .signWith(key,SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()+validity))
+                .signWith(key)
                 .compact();
     }
 
@@ -53,11 +87,19 @@ public class JwtHelper {
     }
 
     private Claims getClaims(String token) {
-     return Jwts.parser()
-             .setSigningKey(key)
-             .build()
-             .parseClaimsJws(token)
-             .getBody();
+//     return Jwts.parser()
+//             .setSigningKey(key)
+//             .build()
+//             .parseClaimsJws(token)
+//             .getBody();
+
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
     }
+
+
 }

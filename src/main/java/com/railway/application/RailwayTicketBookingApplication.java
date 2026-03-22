@@ -2,6 +2,8 @@ package com.railway.application;
 
 import com.railway.application.entity.Role;
 import com.railway.application.repository.RoleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,9 @@ import java.util.UUID;
 @SpringBootApplication
 public class RailwayTicketBookingApplication implements CommandLineRunner {
 
+
+	private static final Logger logger= LoggerFactory.getLogger(RailwayTicketBookingApplication.class);
+
 	public static void main(String[] args)  {
 		SpringApplication.run(RailwayTicketBookingApplication.class, args);
 
@@ -23,6 +28,8 @@ public class RailwayTicketBookingApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		logger.error("Prod");
 
 		if(!roleRepository.existsByName("ROLE_ADMIN"))
 		{

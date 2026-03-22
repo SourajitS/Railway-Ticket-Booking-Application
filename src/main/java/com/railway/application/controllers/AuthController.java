@@ -53,10 +53,13 @@ public class AuthController {
             this.authenticationManager.authenticate(authenticationToken);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.username());
-            String token = jwtHelper.generateToken(userDetails);
+            String token = jwtHelper.generateAccessToken(userDetails);
+
+            String refreshToken= jwtHelper.generateRefreshToken(userDetails);
+
             User user = userRepository.findByEmail(loginRequest.username()).get();
 
-            JwtResponse jwtResponse = new JwtResponse(token,modelMapper.map(user,UserDto.class));
+            JwtResponse jwtResponse = new JwtResponse(token,refreshToken,modelMapper.map(user,UserDto.class));
             return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
         }
         catch (BadCredentialsException ex) {
@@ -78,6 +81,36 @@ public class AuthController {
     {
         UserDto dto = userService.registerUser(userDto);
         return new ResponseEntity<>(dto,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody(required = false) String refreshToken)
+    {
+        if(refreshToken==null)
+        {
+            return new ResponseEntity<>(new ErrorResponse("Refresh Token is null","400",false),HttpStatus.BAD_REQUEST);
+        }
+
+        if(!jwtHelper.isRefreshToken(refreshToken))
+        {
+            return new ResponseEntity<>(new ErrorResponse("Token is not valid refresh","400",false),HttpStatus.BAD_REQUEST);
+
+        }
+//get username
+        String usernameFromToken= jwtHelper.getUsernameFromToken(refreshToken);
+        UserDetails userDetails= userDetailsService.loadUserByUsername(usernameFromToken);
+        if(jwtHelper.isTokenValid(refreshToken,userDetails))
+        {
+           String accessToken= jwtHelper.generateAccessToken(userDetails);
+           String newRefreshToken= jwtHelper.generateRefreshToken(userDetails);
+           UserDto userDto=modelMapper.map(userRepository.findByEmail(usernameFromToken).orElse(null),UserDto.class);
+           return new ResponseEntity<>(new JwtResponse(accessToken,newRefreshToken,userDto),HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new ErrorResponse("Refresh Token is not valid","400",false),HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
 }
